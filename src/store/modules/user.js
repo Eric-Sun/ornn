@@ -42,6 +42,7 @@ const getters = {
 const actions = {
     //登陆状态
     Login: ({ commit }, userInfo) => {
+            console.log(userInfo)
             ac.setData('userInfo',userInfo);
             commit(types.USERINFO, userInfo);
     },

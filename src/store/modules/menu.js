@@ -34,8 +34,8 @@ const actions = {
         let menu = ac.getData('menu');
         if (resh || !menu) {
             let user = JSON.parse(ac.getData('userInfo'));
-        
             api.getAllMenu({uid:user.id}).then(re => {
+                re = re.data;
                 let c = JSON.parse(JSON.stringify(route));
                 let m = handleMenu(c, re.rules);
                 ac.setData('auth',re.rules);

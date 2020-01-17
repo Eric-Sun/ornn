@@ -427,3 +427,8 @@ export const godownUserDel = params => {
 export const godownUserCreate = params => {
   return ax.p('godown/adduser', params);
 }
+
+
+export const request = params=>{
+  return ax.p("",params);
+}

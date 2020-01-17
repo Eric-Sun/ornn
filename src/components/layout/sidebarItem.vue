@@ -1,7 +1,7 @@
 <template>
     <Menu theme="dark" width="auto" :open-names="[open]" :active-name="active" :accordion='true'>
         <div class="layout-logo-left">
-            明亿商超系统
+            我是最牛逼
         </div>
         <template v-for="item in getMenu">
             <router-link v-if="item.noDropdown && item.children.length > 0" :to="item.path+'/'+item.children[0].path">

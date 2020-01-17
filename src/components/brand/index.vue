@@ -67,28 +67,29 @@ export default{
             tableData:[],
             columns7: [
                 {
-                    type: 'index',
+                    // type: 'index',
+                    key:"postId",
                     width: 80,
                     align: 'center'
                 },
                 {
-                    title: '品牌名称',
-                    key: 'name'
+                    title: '帖子名称',
+                    key: 'title'
                 },
                 {
-                    title: '品牌状态',
-                    key: 'status',
+                    title: '发帖用户',
+                    key: 'userName',
                     align: 'center',
-                    render(h, param) {
-                        return h('Icon', {
-                            props: {
-                                type: param.row.status == 1 ? 'checkmark-round' : 'close-circled',
-                            },
-                            style: {
-                                color: param.row.status == 1 ? '#00cc66' : '#ff3300'
-                            }
-                        });
-                    }
+                    // render(h, param) {
+                    //     return h('Icon', {
+                    //         props: {
+                    //             type: param.row.status == 1 ? 'checkmark-round' : 'close-circled',
+                    //         },
+                    //         style: {
+                    //             color: param.row.status == 1 ? '#00cc66' : '#ff3300'
+                    //         }
+                    //     });
+                    // }
                 },
                 {
                     title: '操作',
@@ -164,18 +165,30 @@ export default{
             });
         },
         dispatch(searchParams) {
-            let defaultParams = {
-                startCount: 0,
-                needCount: this.pageNum,
-                bname:this.formInline.name,
-                bisvalid:this.formInline.status
-            };
-            searchParams = typeof searchParams === 'object' ? searchParams : {};
-            let searchData = Object.assign(defaultParams, searchParams);
-            api.getBrand(searchData).then((response)=>{
-                this.tableData = response.datas;
-                this.totals = response.count;
+            // let defaultParams = {
+            //     startCount: 0,
+            //     needCount: this.pageNum,
+            //     bname:this.formInline.name,
+            //     bisvalid:this.formInline.status
+            // };
+            // searchParams = typeof searchParams === 'object' ? searchParams : {};
+            // let searchData = Object.assign(defaultParams, searchParams);
+            // api.getBrand(searchData).then((response)=>{
+            //     this.tableData = response.datas;
+            //     this.totals = response.count;
+            // });
+
+            let params = {
+                act:'admin.post.list',
+                barId:1,
+                pageNum:0,
+                size:50
+            }
+            api.request(params).then((response)=>{
+                    this.tableData = response.list
             });
+
+
         }
     }
 }
