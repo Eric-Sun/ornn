@@ -34,7 +34,7 @@
     <Col :span="12">
       <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">
-          <Page :total="count" :current="1" @on-change="changePage" :page-size="2"></Page>
+          <Page :total="count" :current="1" @on-change="changePage" :page-size="size"></Page>
         </div>
       </div>
     </Col>
@@ -51,6 +51,7 @@ export default {
       replies: [],
       count: 0,
       currentPageNum: 0,
+      size: 20,
       cols: [
         {
           // type: 'index',
@@ -62,8 +63,31 @@ export default {
         {
           // type: 'index',
           title: "回复内容",
-          key: "content",
-          width: 1000
+          key: "content"
+        },
+        {
+          title: "子回复数量",
+          align: "center",
+          width: 100,
+          render: (h, param) => {
+            if (param.row.replyListSize == 0) {
+              return h("div", 0);
+            } else {
+              return h(
+                "Button",
+                {
+                  props: {
+                    type: "default"
+                  },
+                  on: {
+                    // click: this.starPost(params.row.postId)
+                    click: () => this.toReplyDetail(param.row.replyId)
+                  }
+                },
+                param.row.replyListSize
+              );
+            }
+          }
         },
         {
           title: "操作",
@@ -112,7 +136,7 @@ export default {
         act: "admin.reply.list",
         postId: this.postId,
         pageNum: this.currentPageNum,
-        size: 2
+        size: this.size
       };
       searchParams = Object.assign(searchParams, otherParams);
       api.request(searchParams).then(response => {
@@ -137,6 +161,15 @@ export default {
       pageNum = pageNum ? pageNum : 1;
       this.currentPageNum = pageNum - 1;
       this.initRepliesData({ pageNum: this.currentPageNum });
+    },
+    toReplyDetail(replyId) {
+      this.$router.push({
+        path: "/post/replyDetail",
+        query: {
+          postId: this.postId,
+          replyId: replyId
+        }
+      });
     }
   }
 };
