@@ -93,5 +93,5 @@ module.exports = {
     godown_deleteuser: 'godown.deleteuser',//删除仓库人员
 
     postList:'postList',
-    post:"post"
+    postDetail:'postDetail'
 }

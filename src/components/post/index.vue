@@ -7,7 +7,7 @@
       </p>
       <router-link slot="extra" to="/pro/brand/add">
         <Icon type="ios-plus"></Icon>添加品牌
-      </router-link> -->
+      </router-link>-->
       <div style="text-align:right">
         <Form ref="userSearchFrom" :model="formInline" inline>
           <Form-item prop="name">
@@ -84,8 +84,22 @@ export default {
         },
         {
           title: "帖子标题",
-          key: "title",
-          width: 200
+          // key: "title",
+          width: 200,
+          render: function(h, param) {
+            return h(
+              "router-link",
+              {
+                props: {
+                  to: {
+                    path: "/post/detail",
+                    query: { postId: param.row.postId }
+                  }
+                }
+              },
+              param.row.title
+            );
+          }
         },
         {
           title: "帖子内容",
