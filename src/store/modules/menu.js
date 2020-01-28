@@ -37,7 +37,10 @@ const actions = {
             api.getAllMenu({uid:user.id}).then(re => {
                 re = re.data;
                 let c = JSON.parse(JSON.stringify(route));
+                console.log("c:"+JSON.stringify(c))
+                console.log("re.rules:"+JSON.stringify(re.rules))
                 let m = handleMenu(c, re.rules);
+                console.log("m:"+JSON.stringify(m))
                 ac.setData('auth',re.rules);
                 ac.setData('menu', m);
                 commit(types.GET_MENU, m);

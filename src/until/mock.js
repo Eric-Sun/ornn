@@ -20,8 +20,23 @@ Mock.mock(URI + '/rule/uroles', {
     "success": true,
     "errors": [],
     "data": {
-        "ids": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75],
-        "rules": ["user.list", "user.info", "user.add", "user.update", "user.stat", "user.delete", "user.search", "rule.list", "rule.uroles", "rule.group", "rule.addgroup", "rule.groupinfo", "rule.groupupdate", "rule.stat", "rule.gdelete", "rule.gsearch", "brand.lists", "brand.create", "brand.update", "brand.state", "brand.delete", "brand.info", "category.lists", "category.create", "category.update", "category.delete", "attr.create", "attr.update", "attr.list", "attr.info", "attr.delete", "goods.create", "goods.update", "goods.info", "goods.list", "goods.unitfactor", "goods.skuinfo", "goods.uupdate", "seller.create", "seller.update", "seller.info", "seller.stat", "seller.delete", "seller.asslist", "seller.orderlist", "seller.goodslist", "seller.list", "consumer.list", "consumer.orderlist", "consumer.orderinfo", "consumer.callorders", "order.list", "order.stat", "order.info", "order.add", "finance.userorders", "finance.userrefund", "finance.purlist", "finance.settlement", "finance.approvallist", "finance.approval", "finance.refundlist", "finance.refund", "seller.allasslist", "consumer.info", "godown.list", "godown.create", "godown.info", "godown.update", "godown.status", "godown.delete", "godown.adduser", "godown.userlist", "godown.deleteuser"]
+        "ids": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+             22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 36, 37, 38, 39, 40, 41, 42, 43, 
+             44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64,
+              65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75,76],
+        "rules": ["user.list", "user.info", "user.add", "user.update", "user.stat", "user.delete", 
+        "user.search", "rule.list", "rule.uroles", "rule.group", "rule.addgroup", "rule.groupinfo",
+         "rule.groupupdate", "rule.stat", "rule.gdelete", "rule.gsearch", "brand.lists", "brand.create", 
+         "brand.update", "brand.state", "brand.delete", "brand.info", "category.lists", "category.create", 
+         "category.update", "category.delete", "attr.create", "attr.update", "attr.list", "attr.info", 
+         "attr.delete", "goods.create", "goods.update", "goods.info", "goods.list", "goods.unitfactor", 
+         "goods.skuinfo", "goods.uupdate", "seller.create", "seller.update", "seller.info", "seller.stat", 
+         "seller.delete", "seller.asslist", "seller.orderlist", "seller.goodslist", "seller.list", "consumer.list", 
+         "consumer.orderlist", "consumer.orderinfo", "consumer.callorders", "order.list", "order.stat", "order.info", 
+         "order.add", "finance.userorders", "finance.userrefund", "finance.purlist", "finance.settlement", "finance.approvallist", 
+         "finance.approval", "finance.refundlist", "finance.refund", "seller.allasslist", "consumer.info", "godown.list", "godown.create", 
+         "godown.info", "godown.update", "godown.status", "godown.delete", "godown.adduser", "godown.userlist", "deleteuser.deleteuser",
+         "postList"]
     }
 })
 //登陆

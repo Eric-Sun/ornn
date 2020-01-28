@@ -116,6 +116,8 @@ const godown_user = _import('godown/user');
 //添加仓库人员
 const godown_adduser = _import('godown/adduser');
 
+const postList = _import('post/index')
+
 /** 仓库模块 end **/
 
 export default [
@@ -127,6 +129,13 @@ export default [
   },
   {
     path: '/main', name: '', icon: 'grid', component: layout, noDropdown: true, children: [{ path: '', name: '主页', component: main }]
+  },
+  {
+    path: '/post', name: '贴吧', icon: 'ios-cog', component: layout, redirect: '/post/postList',
+    children: [
+      { path: 'postList', name: '帖子列表', meta: { alias: 'postList' }, component: postList }
+      // 如果写多行的话才会在menu显示出贴吧两个字
+    ]
   },
   {
     path: '/sys', name: '系统设置', icon: 'ios-cog', component: layout, redirect: '/sys/user',

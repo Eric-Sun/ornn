@@ -91,4 +91,7 @@ module.exports = {
     godown_adduser: 'godown.adduser',//添加仓库人员
     godown_userlist: 'godown.userlist',//仓库人员列表
     godown_deleteuser: 'godown.deleteuser',//删除仓库人员
+
+    postList:'postList',
+    post:"post"
 }
