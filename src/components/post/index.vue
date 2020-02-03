@@ -152,56 +152,40 @@ export default {
         {
           title: "操作",
           key: "action",
-          align: "center",
+          // align: "center",
           render: (h, params) => {
             let id = params.row.id;
             let status = params.row.status;
-            if (params.row.star == 0)
-              return h(
-                "Button",
-                {
-                  props: {
-                    type: "primary"
-                  },
-                  on: {
-                    // click: this.starPost(params.row.postId)
-                    click: () => {
-                      api
-                        .request({
-                          act: "admin.starPost.add",
-                          postId: params.row.postId
-                        })
-                        .then(response => {
-                          this.dispatch({});
-                        });
-                    }
-                  }
-                },
-                "加精"
-              );
-            else
-              return h(
-                "Button",
-                {
-                  props: {
-                    type: "warning"
-                  },
-                  on: {
-                    // click: this.starPost(params.row.postId)
-                    click: () => {
-                      api
-                        .request({
-                          act: "admin.starPost.deleteByPostId",
-                          postId: params.row.postId
-                        })
-                        .then(response => {
-                          this.dispatch({});
-                        });
-                    }
-                  }
-                },
-                "取消加精"
-              );
+            let postId = params.row.postId;
+            let deleteBtn = fn.newFatalActionButton(
+              "删除",
+              h,
+              this.deletePost,
+              postId
+            );
+            let addStarBtn = fn.newActionButton(
+              "加精",
+              h,
+              this.addStarPost,
+              postId
+            );
+            let deleteStarBtn = fn.newUndoActionButton(
+              "取消加精",
+              h,
+              this.deleteStarPost,
+              ßpostId
+            );
+
+            let onlineBtn = fn.newActionButton("上架", h, this.online, postId);
+            let offlineBtn = fn.newUndoActionButton(
+              "下架",
+              h,
+              this.offline,
+              postId
+            );
+
+            if (params.row.star == 0) return h("div", [addStarBtn, deleteBtn]);
+            else return h("div", [deleteStarBtn, deleteBtn]);
           }
         }
       ],
@@ -221,6 +205,38 @@ export default {
     }
   },
   methods: {
+    online(postId) {},
+    offline(postId) {},
+    deletePost(postId) {
+      api
+        .request({
+          act: "admin.starPost.add",
+          postId: postId
+        })
+        .then(response => {
+          this.dispatch({});
+        });
+    },
+    addStarPost(postId) {
+      api
+        .request({
+          act: "admin.starPost.add",
+          postId: postId
+        })
+        .then(response => {
+          this.dispatch({});
+        });
+    },
+    deleteStarPost(postId) {
+      api
+        .request({
+          act: "admin.starPost.deleteByPostId",
+          postId: postId
+        })
+        .then(response => {
+          this.dispatch({});
+        });
+    },
     changePage(pageNum) {
       pageNum = pageNum ? pageNum : 1;
       this.dispatch({ pageNum: pageNum - 1 });

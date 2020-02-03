@@ -194,6 +194,87 @@ export const GoodsS = (auth, h, cb, args) => {
     ]);
 }
 
+
+/**
+ * 正向操作的button，比如上架，加精
+ * @param btnContent 按钮的中文字
+ * @param {*} h 
+ * @param {*} cb 
+ * 
+ * @param {*} args 
+ */
+export const newActionButton = (btnContent, h, cb, ...args) => {
+
+    return h('div',
+        [
+            h('Button', {
+                props: {
+                    type: "primary",
+                    size: 'small' 
+                },
+                on: {
+                    'click': () => {
+                        cb(...args)
+                    }
+                }
+            }, btnContent)
+        ]);
+}
+
+
+/**
+ * 逆向操作的button，比如上架，加精
+ * @param btnContent 按钮的中文字
+ * @param {*} h 
+ * @param {*} cb 
+ * 
+ * @param {*} args 
+ */
+export const newUndoActionButton = (btnContent, h, cb, ...args) => {
+
+    return h('div',
+        [
+            h('Button', {
+                props: {
+                    type: "warning",
+                    size: 'small' 
+                },
+                on: {
+                    'click': () => {
+                        cb(...args)
+                    }
+                }
+            }, btnContent)
+        ]);
+}
+
+/**
+ * 致命操作，比如删除等
+ * @param btnContent 按钮的中文字
+ * @param {*} h 
+ * @param {*} cb 
+ * 
+ * @param {*} args 
+ */
+export const newFatalActionButton = (btnContent, h, cb, ...args) => {
+
+    return h('div',
+        [
+            h('Button', {
+                props: {
+                    type: "error",
+                    size: 'small' 
+                },
+                on: {
+                    'click': () => {
+                        cb(...args)
+                    }
+                }
+            }, btnContent)
+        ]);
+}
+
+
 //执行删除操作确认框
 export const handleDel = (ok, title, content, cancel) => {
     content = content || '该操作不可逆，您确定要删除当前数据吗？';
@@ -263,15 +344,15 @@ export function checkAuth(auth) {
 }
 
 
-export function getTime(data){
+export function getTime(data) {
     var _data = data;
     //如果是13位正常，如果是10位则需要转化为毫秒
     if (String(data).length == 13) {
-      _data = data
+        _data = data
     } else {
-      _data = data*1000
+        _data = data * 1000
     }
-    const time = new Date(_data);    
+    const time = new Date(_data);
     const Y = time.getFullYear();
     const Mon = time.getMonth() + 1;
     const Day = time.getDate();
@@ -279,5 +360,5 @@ export function getTime(data){
     const Min = time.getMinutes();
     const S = time.getSeconds();
     //自定义选择想要返回的类型
-      return `${Y}-${Mon}-${Day} ${H}:${Min}:${S}`
-  }
+    return `${Y}-${Mon}-${Day} ${H}:${Min}:${S}`
+}

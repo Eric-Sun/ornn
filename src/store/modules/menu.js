@@ -10,7 +10,8 @@ const state = {
     crumb: {
         first: '',
         last: ''
-    }
+    },
+    ncrumb:[]
 };
 
 //创建getters
