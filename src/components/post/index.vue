@@ -173,7 +173,7 @@ export default {
               "取消加精",
               h,
               this.deleteStarPost,
-              ßpostId
+              postId
             );
 
             let onlineBtn = fn.newActionButton("上架", h, this.online, postId);
@@ -210,8 +210,9 @@ export default {
     deletePost(postId) {
       api
         .request({
-          act: "admin.starPost.add",
-          postId: postId
+          act: "admin.post.delete",
+          postId: postId,
+          barId: process.env.BAR_ID
         })
         .then(response => {
           this.dispatch({});
