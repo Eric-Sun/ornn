@@ -1,5 +1,5 @@
 
-let config = {
+var config = {
     // env: Env,
     // apiDomain:'http://staffs.api.mingyi.loc',
     apiDomain:'/api',
