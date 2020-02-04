@@ -329,7 +329,7 @@ export default {
       // });
       let defaultParams = {
         act: "admin.post.list",
-        barId: 1,
+        barId: process.env.BAR_ID,
         pageNum: 0,
         size: 20
       };
