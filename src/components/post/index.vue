@@ -183,9 +183,21 @@ export default {
               this.offline,
               postId
             );
+            let btnList = [];
+            if (params.row.star == 0) {
+              btnList.push(addStarBtn);
+            } else {
+              btnList.push(deleteStarBtn);
+            }
 
-            if (params.row.star == 0) return h("div", [addStarBtn, deleteBtn]);
-            else return h("div", [deleteStarBtn, deleteBtn]);
+            if (params.row.status == 0) {
+              btnList.push(offlineBtn);
+            } else {
+              btnList.push(onlineBtn);
+            }
+
+            btnList.push(deleteBtn);
+            return h("div", btnList);
           }
         }
       ],
@@ -205,8 +217,28 @@ export default {
     }
   },
   methods: {
-    online(postId) {},
-    offline(postId) {},
+    online(postId) {
+      var that = this;
+      api
+        .request({
+          act: "admin.post.online",
+          postId: postId
+        })
+        .then(response => {
+          that.dispatch();
+        });
+    },
+    offline(postId) {
+      var that = this;
+      api
+        .request({
+          act: "admin.post.offline",
+          postId: postId
+        })
+        .then(response => {
+          that.dispatch();
+        });
+    },
     deletePost(postId) {
       api
         .request({

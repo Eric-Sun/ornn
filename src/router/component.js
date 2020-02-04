@@ -119,7 +119,8 @@ const godown_adduser = _import('godown/adduser');
 const postList = _import('post/index')
 const postDetail = _import("post/detail")
 const replyDetail=_import("post/replyDetail")
-
+const deletedPostList= _import("post/deletedList")
+const offlineList = _import("post/offlineList")
 /** 仓库模块 end **/
 
 export default [
@@ -136,9 +137,10 @@ export default [
     path: '/post', name: '贴吧', icon: 'ios-cog', component: layout, redirect: '/post/postList',
     children: [
       { path: 'list', name: '帖子列表', meta: { alias: 'postList' }, component: postList },
+      { path: 'deletedList', name: '已删除帖子列表', meta: { alias: 'deletedPostList' }, component: deletedPostList },
+      { path: 'offlineList', name: '已下架帖子列表', meta: { alias: 'offlineList' }, component: offlineList },
       { path: 'detail', name: '帖子列表', meta: { alias: 'postDetail' }, component: postDetail ,hidden: true  },
       { path: 'replyDetail', name: '回复列表', meta: { alias: 'replyDetail' }, component: replyDetail ,hidden: true  }
-
       // 如果写多行的话才会在menu显示出贴吧两个字
     ]
   },

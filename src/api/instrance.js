@@ -21,13 +21,13 @@ export var itr = (type, url, params) => {
     }
     let arg = qs.stringify(params);
     // url = type == 'get' || type == 'delete' ? url + '?' + arg : url;
-    var userInfo = ac.getData('userInfo');
-    var token = '';
-    if (userInfo) {
-        userInfo = typeof userInfo === 'string' ? JSON.parse(userInfo) : userInfo;
-        token = userInfo.token ? userInfo.token : '';
-    }
-    ax.defaults.headers.TOKEN = token;
+    // var userInfo = ac.getData('userInfo');
+    // var token = '';
+    // if (userInfo) {
+    //     userInfo = typeof userInfo === 'string' ? JSON.parse(userInfo) : userInfo;
+    //     token = userInfo.token ? userInfo.token : '';
+    // }
+    // ax.defaults.headers.TOKEN = token;
     return ax[type](url, arg);
 }
 
