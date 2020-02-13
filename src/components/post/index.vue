@@ -124,6 +124,12 @@ export default {
           // }
         },
         {
+          title: "回复数量",
+          align: "center",
+          width: 80,
+          key:"replyCount"
+        },
+        {
           title: "状态",
           align: "center",
           width: 80,
