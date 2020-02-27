@@ -91,9 +91,9 @@ export default {
       let searchParams = {
         act: "admin.reply.detail",
         postId: this.postId,
-        replyId:this.replyId,
-        pageNum:this.currentPageNum,
-        size:this.size
+        replyId: this.replyId,
+        pageNum: this.currentPageNum,
+        size: this.size
       };
       api.request(searchParams).then(response => {
         that.reply = response;
@@ -101,15 +101,23 @@ export default {
       });
     },
     delReply({ replyId, userId, postId }) {
-      let that = this;
-      let searchParams = {
-        act: "admin.reply.delete",
-        postId: postId,
-        userId: userId,
-        replyId: replyId
-      };
-      api.request(searchParams).then(response => {
-        that.initData();
+      var that = this;
+      that.$Modal.confirm({
+        title: "请再次确认",
+        content:
+          "请确认是否要进行<font size=3 color=red>用户回复删除</font>操作",
+        onOk: () => {
+          let that = this;
+          let searchParams = {
+            act: "admin.reply.delete",
+            postId: postId,
+            userId: userId,
+            replyId: replyId
+          };
+          api.request(searchParams).then(response => {
+            that.initData();
+          });
+        }
       });
     },
     changePage(pageNum) {

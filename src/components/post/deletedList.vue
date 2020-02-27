@@ -118,13 +118,21 @@ export default {
   methods: {
     undoDeletePost(postId) {
       var that = this;
-      let params = {
-        act: "admin.post.undoDelete",
-        barId: process.env.BAR_ID,
-        postId:postId
-      };
-      api.request(params).then(response => {
-        that.initData();
+      that.$Modal.confirm({
+        title: "请再次确认",
+        content: "请确认是否要进行<font size=3 color=red>帖子恢复删除</font>操作",
+        onOk: () => {
+          var that = this;
+          let params = {
+            act: "admin.post.undoDelete",
+            barId: process.env.BAR_ID,
+            postId: postId
+          };
+          api.request(params).then(response => {
+            that.initData();
+          });
+        },
+        onCancel: () => {}
       });
     },
     changePage(pageNum) {

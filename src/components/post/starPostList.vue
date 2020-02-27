@@ -80,13 +80,20 @@ export default {
   methods: {
     undoStarPost(postId) {
       var that = this;
-      let params = {
-        act: "admin.starPost.deleteByPostId",
-        barId: process.env.BAR_ID,
-        postId:postId
-      };
-      api.request(params).then(response => {
-        that.initData();
+      that.$Modal.confirm({
+        title: "请再次确认",
+        content:
+          "请确认是否要进行<font size=3 color=red>用户回复删除</font>操作",
+        onOk: () => {
+          let params = {
+            act: "admin.starPost.deleteByPostId",
+            barId: process.env.BAR_ID,
+            postId: postId
+          };
+          api.request(params).then(response => {
+            that.initData();
+          });
+        }
       });
     },
     changePage(pageNum) {

@@ -227,20 +227,27 @@ export default {
   methods: {
     online(postId) {
       var that = this;
-      api
-        .request({
-          act: "admin.post.online",
-          postId: postId
-        })
-        .then(response => {
-          that.dispatch();
-        });
+      that.$Modal.confirm({
+        title: "请再次确认",
+        content: "请确认是否要进行<font size=3 color=red>帖子下线</font>操作",
+        onOk: () => {
+          api
+            .request({
+              act: "admin.post.online",
+              postId: postId
+            })
+            .then(response => {
+              that.dispatch();
+            });
+        },
+        onCancel: () => {}
+      });
     },
     offline(postId) {
       var that = this;
       that.$Modal.confirm({
         title: "请再次确认",
-        content: "请确认是否要进行下线操作",
+        content: "请确认是否要进行<font size=3 color=red>帖子下线</font>操作",
         onOk: () => {
           api
             .request({
@@ -255,35 +262,59 @@ export default {
       });
     },
     deletePost(postId) {
-      api
-        .request({
-          act: "admin.post.delete",
-          postId: postId,
-          barId: process.env.BAR_ID
-        })
-        .then(response => {
-          this.dispatch({});
-        });
+      var that = this;
+      that.$Modal.confirm({
+        title: "请再次确认",
+        content: "请确认是否要进行 <font size=3 color=red>帖子删除</font>操作",
+        onOk: () => {
+          api
+            .request({
+              act: "admin.post.delete",
+              postId: postId,
+              barId: process.env.BAR_ID
+            })
+            .then(response => {
+              this.dispatch({});
+            });
+        },
+        onCancel: () => {}
+      });
     },
     addStarPost(postId) {
-      api
-        .request({
-          act: "admin.starPost.add",
-          postId: postId
-        })
-        .then(response => {
-          this.dispatch({});
-        });
+      var that = this;
+      that.$Modal.confirm({
+        title: "请再次确认",
+        content: "请确认是否要进行<font size=3 color=red>帖子加精</font>操作",
+        onOk: () => {
+          api
+            .request({
+              act: "admin.starPost.add",
+              postId: postId
+            })
+            .then(response => {
+              this.dispatch({});
+            });
+        },
+        onCancel: () => {}
+      });
     },
     deleteStarPost(postId) {
-      api
-        .request({
-          act: "admin.starPost.deleteByPostId",
-          postId: postId
-        })
-        .then(response => {
-          this.dispatch({});
-        });
+      var that = this;
+      that.$Modal.confirm({
+        title: "请再次确认",
+        content: "请确认是否要进行<font size=3 color=red>帖子取消加精</font>操作",
+        onOk: () => {
+          api
+            .request({
+              act: "admin.starPost.deleteByPostId",
+              postId: postId
+            })
+            .then(response => {
+              this.dispatch({});
+            });
+        },
+        onCancel: () => {}
+      });
     },
     changePage(pageNum) {
       pageNum = pageNum ? pageNum : 1;

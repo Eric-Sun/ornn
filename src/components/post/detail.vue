@@ -147,14 +147,21 @@ export default {
     },
     delReply({ replyId, userId, postId }) {
       let that = this;
-      let searchParams = {
-        act: "admin.reply.delete",
-        postId: postId,
-        userId: userId,
-        replyId: replyId
-      };
-      api.request(searchParams).then(response => {
-        that.initRepliesData();
+      that.$Modal.confirm({
+        title: "请再次确认",
+        content: "请确认是否要进行<font size=3 color=red>回复删除</font>操作",
+        onOk: () => {
+          let searchParams = {
+            act: "admin.reply.delete",
+            postId: postId,
+            userId: userId,
+            replyId: replyId
+          };
+          api.request(searchParams).then(response => {
+            that.initRepliesData();
+          });
+        },
+        onCancel: () => {}
       });
     },
     changePage(pageNum) {
