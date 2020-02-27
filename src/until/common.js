@@ -362,3 +362,18 @@ export function getTime(data) {
     //自定义选择想要返回的类型
     return `${Y}-${Mon}-${Day} ${H}:${Min}:${S}`
 }
+
+export function showModal(that,title,content,okFunc,cancelFunc=function(){}){
+    that.$Modal.confirm({
+        title: title,
+        content: content,
+        onOk: () => {
+            if(okFunc!=undefined)
+                okFunc();
+        },
+        onCancel: () => {
+            if(cancelFunc!=undefined)
+                cancelFunc();
+        }
+    });
+}

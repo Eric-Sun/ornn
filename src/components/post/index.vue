@@ -60,6 +60,7 @@
         </Col>
       </Row>
     </Card>
+    <Spin size="large" fix v-if="spinShow">加载中</Spin>
   </div>
 </template>
 <script>
@@ -74,6 +75,7 @@ export default {
       modal: false,
       id: 0,
       tableData: [],
+      spinShow: false,
       columns7: [
         {
           // type: 'index',
@@ -127,7 +129,7 @@ export default {
           title: "回复数量",
           align: "center",
           width: 80,
-          key:"replyCount"
+          key: "replyCount"
         },
         {
           title: "状态",
@@ -236,14 +238,21 @@ export default {
     },
     offline(postId) {
       var that = this;
-      api
-        .request({
-          act: "admin.post.offline",
-          postId: postId
-        })
-        .then(response => {
-          that.dispatch();
-        });
+      that.$Modal.confirm({
+        title: "请再次确认",
+        content: "请确认是否要进行下线操作",
+        onOk: () => {
+          api
+            .request({
+              act: "admin.post.offline",
+              postId: postId
+            })
+            .then(response => {
+              that.dispatch();
+            });
+        },
+        onCancel: () => {}
+      });
     },
     deletePost(postId) {
       api
@@ -333,6 +342,9 @@ export default {
       //     this.tableData = response.datas;
       //     this.totals = response.count;
       // });
+      this.tableData = [];
+      this.totals = 0;
+      this.spinShow = true;
       let defaultParams = {
         act: "admin.post.list",
         barId: process.env.BAR_ID,
@@ -346,6 +358,7 @@ export default {
       api.request(searchData).then(response => {
         this.tableData = response.list;
         this.totals = response.count;
+        this.spinShow = false;
       });
     }
   }
