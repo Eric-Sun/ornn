@@ -56,9 +56,21 @@ export default {
         {
           // type: 'index',
           title: "回复用户",
-          key: "userName",
+          // key: "userName",
           width: 150,
-          align: "center"
+          align: "center",
+          render: (h, param) => {
+            var name;
+            if (param.row.userId == this.post.userId) {
+              name = param.row.userName + "[楼主]";
+              return h("div", {style:{
+                color:"red"
+              }},name);
+            } else {
+              name = param.row.userName;
+              return h("div", name);
+            }
+          }
         },
         {
           // type: 'index',

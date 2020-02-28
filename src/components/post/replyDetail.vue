@@ -8,7 +8,8 @@
       </Row>
       <Row>
         <Col span="4">发帖用户</Col>
-        <Col span="12">{{reply.userName}}</Col>
+        <Col v-if="reply.userId!=reply.postUserId" span="12">{{reply.userName}}</Col>
+        <Col v-if="reply.userId==reply.postUserId" style="color:red" span="12">{{reply.userName+"[楼主]"}}</Col>
       </Row>
       <Row>
         <Col span="4">回复时间</Col>
@@ -45,9 +46,27 @@ export default {
         {
           // type: 'index',
           title: "回复用户",
-          key: "userName",
           width: 150,
-          align: "center"
+          align: "center",
+          render: (h, param) => {
+            console.log(param.row);
+            var name;
+            if (param.row.userId == param.row.postUserId) {
+              name = param.row.userName + "[楼主]";
+              return h(
+                "div",
+                {
+                  style: {
+                    color: "red"
+                  }
+                },
+                name
+              );
+            } else {
+              name = param.row.userName;
+              return h("div", name);
+            }
+          }
         },
         {
           // type: 'index',
