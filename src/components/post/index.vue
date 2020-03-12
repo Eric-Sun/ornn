@@ -71,7 +71,7 @@ export default {
   data() {
     return {
       curr: 1,
-      pageNum: 10,
+      pageNum: 0,
       modal: false,
       id: 0,
       tableData: [],
@@ -237,7 +237,7 @@ export default {
               postId: postId
             })
             .then(response => {
-              that.dispatch();
+              that.dispatch({pageNum:that.getPageNum()});
             });
         },
         onCancel: () => {}
@@ -255,7 +255,7 @@ export default {
               postId: postId
             })
             .then(response => {
-              that.dispatch();
+              that.dispatch({pageNum:that.getPageNum()});
             });
         },
         onCancel: () => {}
@@ -274,7 +274,7 @@ export default {
               barId: process.env.BAR_ID
             })
             .then(response => {
-              this.dispatch({});
+              this.dispatch({pageNum:this.getPageNum()});
             });
         },
         onCancel: () => {}
@@ -292,7 +292,7 @@ export default {
               postId: postId
             })
             .then(response => {
-              this.dispatch({});
+              this.dispatch({pageNum:this.getPageNum()});
             });
         },
         onCancel: () => {}
@@ -310,15 +310,18 @@ export default {
               postId: postId
             })
             .then(response => {
-              this.dispatch({});
+              this.dispatch({pageNum:this.getPageNum()});
             });
         },
         onCancel: () => {}
       });
     },
     changePage(pageNum) {
-      pageNum = pageNum ? pageNum : 1;
-      this.dispatch({ pageNum: pageNum - 1 });
+      this.pageNum = pageNum ? pageNum : 1;
+      this.dispatch({ pageNum: this.pageNum - 1 });
+    },
+    getPageNum(){
+      return this.pageNum-1;
     },
     // changePageNum(num) {
     //   this.pageNum = parseInt(num);
