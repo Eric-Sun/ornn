@@ -432,3 +432,7 @@ export const godownUserCreate = params => {
 export const request = params=>{
   return ax.p("",params);
 }
+export const requestUploadFile = params=>{
+  return ax.updateFile("",params);
+}
+

@@ -15,6 +15,12 @@
         <Col span="12">{{post.userName}}</Col>
       </Row>
       <Row>
+        <Col span="4">图片</Col>
+        <Col span="12">
+          <Button v-on:click="showModal">{{post.imgList.length}}张图片</Button>
+        </Col>
+      </Row>
+      <Row>
         <Col span="4">状态</Col>
         <Col span="12">{{post.status==0?"正常":"下架"}}</Col>
       </Row>
@@ -38,11 +44,19 @@
         </div>
       </div>
     </Col>
+    <Modal v-model="imgModal" title="帖子图片" @on-ok="updateImg" @on-cancel="cancel">
+      <div v-if="post.imgList.length==0">
+        <p>无图片</p>
+        <input type="file" id="file" multiple="multiple" @change="handleFile()"  ref="inputer"/>
+      </div>
+    </Modal>
   </Card>
 </template>
 <script>
 import * as api from "../../api/common.js";
 import * as fn from "../../until/common.js";
+import config from "../../../config/config.js";
+
 export default {
   data() {
     return {
@@ -52,6 +66,11 @@ export default {
       count: 0,
       currentPageNum: 0,
       size: 20,
+      imgModal: false,
+      uploadData: {
+        act: "img.upload",
+        type: 2
+      },
       cols: [
         {
           // type: 'index',
@@ -63,9 +82,15 @@ export default {
             var name;
             if (param.row.userId == this.post.userId) {
               name = param.row.userName + "[楼主]";
-              return h("div", {style:{
-                color:"red"
-              }},name);
+              return h(
+                "div",
+                {
+                  style: {
+                    color: "red"
+                  }
+                },
+                name
+              );
             } else {
               name = param.row.userName;
               return h("div", name);
@@ -132,6 +157,30 @@ export default {
     }
   },
   methods: {
+    handleFile() {
+       let inputDOM = this.$refs.inputer;
+        // 通过DOM取文件数据
+        let fs = inputDOM.files;
+      var formData = new FormData();
+      let max_size = 1024 * 1024 * 100;
+
+      for (let i = 0; i < fs.length; i++) {
+        let d = fs[0];
+        if (d.size <= max_size) {
+          //文件必须小于100M
+            //文件必须为文档
+            formData.append("file", fs[i]); //文件上传处理
+        } else {
+          alert("上传文件过大！");
+          return false;
+        }
+      }
+      formData.append("act","img.upload");
+      console.log(formData.get("files"));
+      api.requestUploadFile(formData).then(response => {
+        that.post = response;
+      });
+    },
     initPostData() {
       let that = this;
       let searchParams = {
@@ -176,10 +225,19 @@ export default {
         onCancel: () => {}
       });
     },
+    getUploadUrl() {
+      return config.apiDomain;
+    },
+    showModal() {
+      this.imgModal = true;
+    },
     changePage(pageNum) {
       pageNum = pageNum ? pageNum : 1;
       this.currentPageNum = pageNum - 1;
       this.initRepliesData({ pageNum: this.currentPageNum });
+    },
+    cancel() {
+      this.imgModal = false;
     },
     toReplyDetail(replyId) {
       this.$router.push({
