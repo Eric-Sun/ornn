@@ -45,10 +45,42 @@
       </div>
     </Col>
     <Modal v-model="imgModal" title="帖子图片" @on-ok="updateImg" @on-cancel="cancel">
-      <div v-if="post.imgList.length==0">
-        <p>无图片</p>
-        <input type="file" id="file" multiple="multiple" @change="handleFile()"  ref="inputer"/>
+      <div class="demo-upload-list" v-for="item in uploadList">
+        <template v-if="item.status === 'finished'">
+          <img :src="item.url" />
+          <div class="demo-upload-list-cover">
+            <Icon type="ios-eye-outline" @click.native="handleView(item.url)"></Icon>
+            <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
+          </div>
+        </template>
+        <template v-else>
+          <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
+        </template>
       </div>
+      <Upload
+        ref="upload"
+        :show-upload-list="false"
+        :default-file-list="defaultList"
+        :on-success="handleSuccess"
+        :format="['jpg','jpeg','png']"
+        :max-size="2048"
+        :on-format-error="handleFormatError"
+        :on-exceeded-size="handleMaxSize"
+        :before-upload="handleBeforeUpload"
+        multiple
+        type="drag"
+        :action="getUploadUrl()"
+        :data="uploadData"
+        style="display: inline-block;width:58px;"
+      >
+        <div style="width: 58px;height:58px;line-height: 58px;">
+          <Icon type="ios-camera" size="20"></Icon>
+        </div>
+      </Upload>
+      <Modal title="View Image" v-model="visible">
+        <img :src="imgUrl" v-if="visible" style="width: 100%" />
+      </Modal>
+      <!-- <input type="file" id="file" multiple="multiple" @change="handleFile()"  ref="inputer"/> -->
     </Modal>
   </Card>
 </template>
@@ -60,6 +92,11 @@ import config from "../../../config/config.js";
 export default {
   data() {
     return {
+      defaultList: [],
+      imgUrl: "",
+      visible: false,
+      uploadList: [],
+
       postId: 0,
       post: {},
       replies: [],
@@ -156,31 +193,75 @@ export default {
       return fn.getTime(this.post.createtime);
     }
   },
+  mounted() {
+    this.uploadList = this.$refs.upload.fileList;
+  },
   methods: {
-    handleFile() {
-       let inputDOM = this.$refs.inputer;
-        // 通过DOM取文件数据
-        let fs = inputDOM.files;
-      var formData = new FormData();
-      let max_size = 1024 * 1024 * 100;
-
-      for (let i = 0; i < fs.length; i++) {
-        let d = fs[0];
-        if (d.size <= max_size) {
-          //文件必须小于100M
-            //文件必须为文档
-            formData.append("file", fs[i]); //文件上传处理
-        } else {
-          alert("上传文件过大！");
-          return false;
-        }
-      }
-      formData.append("act","img.upload");
-      console.log(formData.get("files"));
-      api.requestUploadFile(formData).then(response => {
-        that.post = response;
+    handleView(url) {
+      this.imgUrl = url;
+      this.visible = true;
+    },
+    handleRemove(file) {
+      const fileList = this.$refs.upload.fileList;
+      this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
+      this.uploadList = this.$refs.upload.fileList;
+    },
+    handleSuccess(res, file) {
+      console.log(res);
+      file.url = res.url;
+      file.name = "7eb99afb9d5f317c912f08b5212fd69a";
+      file.id = res.imgId;
+      this.uploadList.push(file);
+    },
+    handleFormatError(file) {
+      this.$Notice.warning({
+        title: "The file format is incorrect",
+        desc:
+          "File format of " +
+          file.name +
+          " is incorrect, please select jpg or png."
       });
     },
+    handleMaxSize(file) {
+      this.$Notice.warning({
+        title: "Exceeding file size limit",
+        desc: "File  " + file.name + " is too large, no more than 2M."
+      });
+    },
+    handleBeforeUpload() {
+      const check = this.uploadList.length < 5;
+      if (!check) {
+        this.$Notice.warning({
+          title: "Up to five pictures can be uploaded."
+        });
+      }
+      return check;
+    },
+    // handleFile() {
+    //   let inputDOM = this.$refs.inputer;
+    //   // 通过DOM取文件数据
+    //   let fs = inputDOM.files;
+    //   var formData = new FormData();
+    //   let max_size = 1024 * 1024 * 100;
+
+    //   for (let i = 0; i < fs.length; i++) {
+    //     let d = fs[0];
+    //     if (d.size <= max_size) {
+    //       //文件必须小于100M
+    //       //文件必须为文档
+    //       formData.append("file", fs[i]); //文件上传处理
+    //     } else {
+    //       alert("上传文件过大！");
+    //       return false;
+    //     }
+    //   }
+    //   formData.append("act", "img.upload");
+    //   formData.append("type", 2);
+    //   console.log(formData.get("files"));
+    //   api.requestUploadFile(formData).then(response => {
+    //     that.post = response;
+    //   });
+    // },
     initPostData() {
       let that = this;
       let searchParams = {
@@ -205,6 +286,22 @@ export default {
         that.count = response.count;
         console.log(that.count);
       });
+    },
+    updateImg() {
+      let imgIdList = [];
+      for (var index in this.uploadList) {
+        imgIdList.push(this.uploadList[index].id);
+      }
+      console.log(JSON.stringify(imgIdList));
+      api
+        .request({
+          act: "admin.post.updateImg",
+          postId: this.postId,
+          imgIdListStr: JSON.stringify(imgIdList)
+        })
+        .then(response => {
+          // that.post = response;
+        });
     },
     delReply({ replyId, userId, postId }) {
       let that = this;
