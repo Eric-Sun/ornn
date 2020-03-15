@@ -329,7 +329,7 @@ export default {
       this.dispatch({ pageNum: this.pageNum - 1 });
     },
     getPageNum(){
-      return this.pageNum-1;
+      return this.pageNum==0?0:this.pageNum-1;
     },
     // changePageNum(num) {
     //   this.pageNum = parseInt(num);
