@@ -45,17 +45,17 @@
       </div>
     </Col>
     <Modal v-model="imgModal" title="帖子图片" @on-ok="updateImg" @on-cancel="cancel">
-      <div class="demo-upload-list" v-for="item in uploadList">
-        <template v-if="item.status === 'finished'">
+      <div class="demo-upload-list" v-for="item in this.post.imgList">
+        <!-- <template v-if="item.status === 'finished'"> -->
           <img :src="item.url" />
           <div class="demo-upload-list-cover">
             <Icon type="ios-eye-outline" @click.native="handleView(item.url)"></Icon>
             <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
           </div>
-        </template>
-        <template v-else>
+        <!-- </template> -->
+        <!-- <template v-else>
           <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
-        </template>
+        </template> -->
       </div>
       <Upload
         ref="upload"
@@ -194,7 +194,7 @@ export default {
     }
   },
   mounted() {
-    this.uploadList = this.$refs.upload.fileList;
+    // this.uploadList = this.$refs.upload.fileList;
   },
   methods: {
     handleView(url) {
@@ -202,16 +202,17 @@ export default {
       this.visible = true;
     },
     handleRemove(file) {
-      const fileList = this.$refs.upload.fileList;
-      this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
-      this.uploadList = this.$refs.upload.fileList;
+      // const fileList = this.$refs.upload.fileList;
+      // this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
+      // this.uploadList = this.$refs.upload.fileList;
+      this.post.imgList.splice(this.post.imgList.indexOf(file), 1);
     },
     handleSuccess(res, file) {
       console.log(res);
-      file.url = res.url;
-      file.name = "7eb99afb9d5f317c912f08b5212fd69a";
-      file.id = res.imgId;
-      this.uploadList.push(file);
+      let img = {};
+      img.url=res.url;
+      img.imgId = res.imgId;
+      this.post.imgList.push(img);
     },
     handleFormatError(file) {
       this.$Notice.warning({
@@ -289,8 +290,9 @@ export default {
     },
     updateImg() {
       let imgIdList = [];
-      for (var index in this.uploadList) {
-        imgIdList.push(this.uploadList[index].id);
+      var that = this;
+      for (var index in this.post.imgList) {
+        imgIdList.push(this.post.imgList[index].imgId);
       }
       console.log(JSON.stringify(imgIdList));
       api
@@ -301,6 +303,7 @@ export default {
         })
         .then(response => {
           // that.post = response;
+          that.initPostData();
         });
     },
     delReply({ replyId, userId, postId }) {

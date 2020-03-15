@@ -79,15 +79,15 @@ export default {
       columns7: [
         {
           // type: 'index',
-          title: "帖子id",
+          title: "id",
           key: "postId",
-          width: 80,
+          width: 60,
           align: "center"
         },
         {
           title: "帖子标题",
           // key: "title",
-          width: 200,
+          width: 150,
           render: function(h, param) {
             return h(
               "router-link",
@@ -124,6 +124,14 @@ export default {
           //         }
           //     });
           // }
+        },
+        {
+          title: "图片信息",
+          align: "center",
+          // width: 80,
+          render(h, param) {
+            return h("div", param.row.imgList.length+"张");
+          }
         },
         {
           title: "回复数量",
