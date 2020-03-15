@@ -102,7 +102,14 @@ export default {
               postId
             );
 
-            return h("div", [undoDeleteBtn]);
+            let deleteBtn = fn.newFatalActionButton(
+              "删除",
+              h,
+              this.deletePost,
+              postId
+            );
+
+            return h("div", [undoDeleteBtn, deleteBtn]);
           }
         }
       ],
@@ -113,9 +120,28 @@ export default {
     };
   },
   created() {
-    this.initData();
+    this.initData({});
   },
   methods: {
+    deletePost(postId) {
+      var that = this;
+      that.$Modal.confirm({
+        title: "请再次确认",
+        content: "请确认是否要进行 <font size=3 color=red>帖子删除</font>操作",
+        onOk: () => {
+          api
+            .request({
+              act: "admin.post.delete",
+              postId: postId,
+              barId: process.env.BAR_ID
+            })
+            .then(response => {
+              that.initData({ pageNum: this.getPageNum() });
+            });
+        },
+        onCancel: () => {}
+      });
+    },
     onlinePost(postId) {
       var that = this;
       that.$Modal.confirm({
@@ -128,16 +154,19 @@ export default {
             postId: postId
           };
           api.request(params).then(response => {
-            that.initData();
+            that.initData({ pageNum: this.getPageNum() });
           });
         }
       });
     },
     changePage(pageNum) {
-      pageNum = pageNum ? pageNum : 1;
-      this.dispatch({ pageNum: pageNum - 1 });
+      this.pageNum = pageNum ? pageNum : 1;
+      this.initData({ pageNum: pageNum - 1 });
     },
-    initData() {
+    getPageNum(){
+      return this.pageNum==0?0:this.pageNum-1;
+    },
+    initData(searchParams) {
       var that = this;
       let params = {
         act: "admin.post.offlineList",
@@ -145,7 +174,9 @@ export default {
         pageNum: this.pageNum,
         size: this.size
       };
-      api.request(params).then(response => {
+       let searchData = Object.assign(params, searchParams);
+
+      api.request(searchData).then(response => {
         that.tableData = response.data;
         that.count = response.count;
         console.log(that.tableData);
