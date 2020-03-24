@@ -61,6 +61,11 @@ export default {
           key: "userName",
           align: "center"
         },
+         {
+          title: "抓取回复数量",
+          key: "fReplyCount",
+          align: "center"
+        },
         {
           title: "状态",
           align: "center",
