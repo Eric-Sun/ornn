@@ -10,10 +10,16 @@
       </router-link>-->
       <div style="text-align:right">
         <Form ref="userSearchFrom" :model="formInline" inline>
-          <Form-item prop="name">
-            <Input type="text" v-model="formInline.name" placeholder="帖子标题"></Input>
+           <Form-item prop="name">
+            <Input type="text" v-model="formInline.postId" placeholder="帖子id"></Input>
           </Form-item>
-          <Form-item prop="status">
+          <Form-item prop="name">
+            <Input type="text" v-model="formInline.title" placeholder="帖子标题"></Input>
+          </Form-item>
+           <Form-item prop="name">
+            <Input type="text" v-model="formInline.userId" placeholder="用户ID"></Input>
+          </Form-item>
+          <!-- <Form-item prop="status">
             <Select
               size="large"
               style="width:100px;height:32px;text-align:left"
@@ -24,7 +30,7 @@
               <Option value="0">已禁用</Option>
               <Option value="1">正常</Option>
             </Select>
-          </Form-item>
+          </Form-item> -->
           <Form-item>
             <Button type="primary" icon="ios-search" @click="searchData">搜索</Button>
           </Form-item>
@@ -218,8 +224,9 @@ export default {
         }
       ],
       formInline: {
-        name: "",
-        status: ""
+        postId:"",
+        title:"", 
+        userId:""
       },
       totals: 0
     };
@@ -336,11 +343,19 @@ export default {
     //   this.dispatch({ pageNum: this.pageNum - 1 });
     // },
     searchData() {
-      this.pageNum = 10;
-      this.dispatch({
-        bname: this.formInline.name,
-        bisvalid: this.formInline.status
-      });
+      console.log("fdsa")
+       api.request({
+              barId:process.env.BAR_ID,
+              act: "admin.post.query",
+              postId: this.formInline.postId,
+              title:this.formInline.title,
+              userId:this.formInline.userId,
+              pageNum:0,
+              size:20
+            })
+            .then(response => {
+              this.tableData = response.list;
+            });
     },
     info(id) {
       this.modal = true;
