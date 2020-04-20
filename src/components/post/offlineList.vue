@@ -61,10 +61,21 @@ export default {
           key: "userName",
           align: "center"
         },
-         {
+        {
           title: "抓取回复数量",
-          key: "fReplyCount",
-          align: "center"
+          align: "center",
+          render: function(h, param) {
+            return h(
+              "div",
+              {
+                style: {
+                  color: "red",
+                  fontSize: "14px"
+                }
+              },
+              param.row.fReplyCount
+            );
+          }
         },
         {
           title: "状态",
@@ -168,8 +179,8 @@ export default {
       this.pageNum = pageNum ? pageNum : 1;
       this.initData({ pageNum: pageNum - 1 });
     },
-    getPageNum(){
-      return this.pageNum==0?0:this.pageNum-1;
+    getPageNum() {
+      return this.pageNum == 0 ? 0 : this.pageNum - 1;
     },
     initData(searchParams) {
       var that = this;
@@ -179,7 +190,7 @@ export default {
         pageNum: this.pageNum,
         size: this.size
       };
-       let searchData = Object.assign(params, searchParams);
+      let searchData = Object.assign(params, searchParams);
 
       api.request(searchData).then(response => {
         that.tableData = response.data;

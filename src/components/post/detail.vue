@@ -32,6 +32,12 @@
         <Col span="4">发帖时间</Col>
         <Col span="12">{{getTime}}</Col>
       </Row>
+      <Row>
+                <Col span="4">发帖时间</Col>
+        <Col span="12">        <Button v-on:click="deletePost">删除</Button>
+      </Col>
+        </Col>
+      </Row>
     </div>
     <Row>回复列表</Row>
     <div>
@@ -197,6 +203,18 @@ export default {
     // this.uploadList = this.$refs.upload.fileList;
   },
   methods: {
+    deletePost(){
+      var that = this;
+      let params = {
+            act: "admin.post.delete",
+            barId: process.env.BAR_ID,
+            postId: this.postId
+          };
+          api.request(params).then(response => {
+            // fdsafds
+            this.$router.push({path:'/post/list'});
+          });
+    },
     handleView(url) {
       this.imgUrl = url;
       this.visible = true;
