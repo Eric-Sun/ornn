@@ -122,6 +122,8 @@ const replyDetail=_import("post/replyDetail")
 const deletedPostList= _import("post/deletedList")
 const offlineList = _import("post/offlineList")
 const starPostList = _import("post/starPostList")
+const topicList = _import("topic/list")
+
 /** 仓库模块 end **/
 
 export default [
@@ -144,6 +146,13 @@ export default [
       { path: 'detail', name: '帖子列表', meta: { alias: 'postDetail' }, component: postDetail ,hidden: true  },
       { path: 'replyDetail', name: '回复列表', meta: { alias: 'replyDetail' }, component: replyDetail ,hidden: true  }
       // 如果写多行的话才会在menu显示出贴吧两个字
+    ]
+  },
+  {
+    path: '/topic', name: 'topic', icon: 'ios-cog', component: layout, redirect: '/topic/list',
+    children: [
+      { path: 'list', name: 'topic列表', meta: { alias: 'topicList' }, component: topicList },
+      { path: 'list', name: 'topic列表', meta: { alias: 'topicList' }, component: topicList }
     ]
   }
   // {
