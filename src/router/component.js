@@ -145,14 +145,14 @@ export default [
       { path: 'starPostList', name: '精华帖子列表', meta: { alias: 'starPostList' }, component: starPostList },
       { path: 'detail', name: '帖子列表', meta: { alias: 'postDetail' }, component: postDetail ,hidden: true  },
       { path: 'replyDetail', name: '回复列表', meta: { alias: 'replyDetail' }, component: replyDetail ,hidden: true  }
-      // 如果写多行的话才会在menu显示出贴吧两个字
+      // 如果写多行的话才会在menu显示出贴吧两个字,需要修改mock，需要修改menu.js
     ]
   },
   {
     path: '/topic', name: 'topic', icon: 'ios-cog', component: layout, redirect: '/topic/list',
     children: [
-      { path: 'list', name: 'topic列表', meta: { alias: 'topicList' }, component: topicList },
       { path: 'list', name: 'topic列表', meta: { alias: 'topicList' }, component: topicList }
+
     ]
   }
   // {

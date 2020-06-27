@@ -96,5 +96,6 @@ module.exports = {
     postDetail:'postDetail',
     deletedPostList:'deletedPostList',
     offlineList:'offlineList',
-    starPostList:"starPostList"
+    starPostList:"starPostList",
+    topicList:"topicList"
 }

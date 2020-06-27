@@ -273,10 +273,8 @@ export default {
                     var allTopicList = response.data.map(function(v){return {key:v.id,label:v.name}})
                     that.updateTopic.info = allTopicList;
                     that.updateTopic.update=topicIdList;
-                    console.log(topicIdList);
-                     console.log(allTopicList);
-                          this.topicModal = true;
-
+                    that.updateTopic.postId=postId;
+                    that.topicModal=true;
             });
       // 加载这个post的topic状态和所有的topic信息，用来组成transfer
 
@@ -285,9 +283,16 @@ export default {
       this.topicModal = false;
     },
     doUpdateTopic(){
-
-      需要更新这个内容
-      console.log(this.updateTopic.update)
+      var that = this;
+      api
+            .request({
+              act: "admin.post.updateTopicList",
+              topicIdListStr:JSON.stringify(this.updateTopic.update),
+              postId:this.updateTopic.postId
+            })
+            .then(response => {
+               that.dispatch({pageNum:that.getPageNum()});
+            });
     },
     online(postId) {
       var that = this;
