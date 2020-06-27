@@ -65,6 +65,19 @@
           </div>
         </Col>
       </Row>
+
+      <Modal
+        v-model="topicModal"
+        title="topic信息"
+        @on-ok="doUpdateTopic"
+        @on-cancel="hideTopicModal"
+        ok-text="更新Topic">
+        <Transfer
+        :data="updateTopic.info"
+        :target-keys="updateTopic.update"
+        @on-change="topicTransferChange"
+        ></Transfer>
+    </Modal>
     </Card>
     <Spin size="large" fix v-if="spinShow">加载中</Spin>
   </div>
@@ -78,7 +91,9 @@ export default {
     return {
       curr: 1,
       pageNum: 0,
+      updateTopic:{info:[],update:[]},
       modal: false,
+      topicModal:false,
       id: 0,
       tableData: [],
       spinShow: false,
@@ -179,6 +194,7 @@ export default {
             let id = params.row.id;
             let status = params.row.status;
             let postId = params.row.postId;
+            let topicList = params.row.topicList;
             let deleteBtn = fn.newFatalActionButton(
               "删除",
               h,
@@ -205,6 +221,8 @@ export default {
               this.offline,
               postId
             );
+
+            let topicBtn = fn.newActionButton("查看topic信息",h,this.showTopicModal,{postId,topicList});
             let btnList = [];
             if (params.row.star == 0) {
               btnList.push(addStarBtn);
@@ -219,6 +237,7 @@ export default {
             }
 
             btnList.push(deleteBtn);
+            btnList.push(topicBtn);
             return h("div", btnList);
           }
         }
@@ -240,6 +259,36 @@ export default {
     }
   },
   methods: {
+    topicTransferChange(newTargetKeys){
+      this.updateTopic.update = newTargetKeys;
+    },
+    showTopicModal({postId,topicList}){
+      var that = this;
+       api
+            .request({
+              act: "admin.topic.list"
+            })
+            .then(response => {
+                    var topicIdList = topicList.map(function(v){return v.id});
+                    var allTopicList = response.data.map(function(v){return {key:v.id,label:v.name}})
+                    that.updateTopic.info = allTopicList;
+                    that.updateTopic.update=topicIdList;
+                    console.log(topicIdList);
+                     console.log(allTopicList);
+                          this.topicModal = true;
+
+            });
+      // 加载这个post的topic状态和所有的topic信息，用来组成transfer
+
+    },
+    hideTopicModal(){
+      this.topicModal = false;
+    },
+    doUpdateTopic(){
+
+      需要更新这个内容
+      console.log(this.updateTopic.update)
+    },
     online(postId) {
       var that = this;
       that.$Modal.confirm({
