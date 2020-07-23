@@ -123,6 +123,7 @@ const deletedPostList= _import("post/deletedList")
 const offlineList = _import("post/offlineList")
 const starPostList = _import("post/starPostList")
 const topicList = _import("topic/list")
+const unauditList = _import("post/unauditList")
 
 /** 仓库模块 end **/
 
@@ -144,7 +145,9 @@ export default [
       { path: 'offlineList', name: '已下架帖子列表', meta: { alias: 'offlineList' }, component: offlineList },
       { path: 'starPostList', name: '精华帖子列表', meta: { alias: 'starPostList' }, component: starPostList },
       { path: 'detail', name: '帖子列表', meta: { alias: 'postDetail' }, component: postDetail ,hidden: true  },
-      { path: 'replyDetail', name: '回复列表', meta: { alias: 'replyDetail' }, component: replyDetail ,hidden: true  }
+      { path: 'replyDetail', name: '回复列表', meta: { alias: 'replyDetail' }, component: replyDetail ,hidden: true  },
+      { path: 'unauditList', name: '需审核列表', meta: { alias: 'unauditList' }, component: unauditList  }
+
       // 如果写多行的话才会在menu显示出贴吧两个字,需要修改mock，需要修改menu.js
     ]
   },
