@@ -10,13 +10,13 @@
       </router-link>-->
       <div style="text-align:right">
         <Form ref="userSearchFrom" :model="formInline" inline>
-           <Form-item prop="name">
+          <Form-item prop="name">
             <Input type="text" v-model="formInline.postId" placeholder="帖子id"></Input>
           </Form-item>
           <Form-item prop="name">
             <Input type="text" v-model="formInline.title" placeholder="帖子标题"></Input>
           </Form-item>
-           <Form-item prop="name">
+          <Form-item prop="name">
             <Input type="text" v-model="formInline.userId" placeholder="用户ID"></Input>
           </Form-item>
           <!-- <Form-item prop="status">
@@ -30,7 +30,7 @@
               <Option value="0">已禁用</Option>
               <Option value="1">正常</Option>
             </Select>
-          </Form-item> -->
+          </Form-item>-->
           <Form-item>
             <Button type="primary" icon="ios-search" @click="searchData">搜索</Button>
           </Form-item>
@@ -71,13 +71,31 @@
         title="topic信息"
         @on-ok="doUpdateTopic"
         @on-cancel="hideTopicModal"
-        ok-text="更新Topic">
+        ok-text="更新Topic"
+      >
         <Transfer
-        :data="updateTopic.info"
-        :target-keys="updateTopic.update"
-        @on-change="topicTransferChange"
+          :data="updateTopic.info"
+          :target-keys="updateTopic.update"
+          @on-change="topicTransferChange"
         ></Transfer>
-    </Modal>
+      </Modal>
+
+      <Modal
+        v-model="auditModal"
+        title="审核状态修改"
+        @on-ok="doUpdateAuditStatus"
+        @on-cancel="hideAuditModal"
+      >
+        <RadioGroup v-model="auditStatus">
+          <Radio label="0">
+            <span style="color:green">审核通过</span>
+          </Radio>
+          <Radio label="2">
+            <span style="color:red">审核不通过</span>
+          </Radio>
+        </RadioGroup>
+
+      </Modal>
     </Card>
     <Spin size="large" fix v-if="spinShow">加载中</Spin>
   </div>
@@ -91,12 +109,15 @@ export default {
     return {
       curr: 1,
       pageNum: 0,
-      updateTopic:{info:[],update:[]},
+      updateTopic: { info: [], update: [] },
       modal: false,
-      topicModal:false,
+      topicModal: false,
       id: 0,
       tableData: [],
       spinShow: false,
+      auditStatus: 0,
+      auditModal: false,
+      auditPostId: 0,
       columns7: [
         {
           // type: 'index',
@@ -151,7 +172,7 @@ export default {
           align: "center",
           // width: 80,
           render(h, param) {
-            return h("div", param.row.imgList.length+"张");
+            return h("div", param.row.imgList.length + "张");
           }
         },
         {
@@ -222,7 +243,18 @@ export default {
               postId
             );
 
-            let topicBtn = fn.newActionButton("查看topic信息",h,this.showTopicModal,{postId,topicList});
+            let topicBtn = fn.newActionButton(
+              "查看topic信息",
+              h,
+              this.showTopicModal,
+              { postId, topicList }
+            );
+            let auditBtn = fn.newActionButton(
+              "审核帖子",
+              h,
+              this.showAuditModal,
+              { postId }
+            );
             let btnList = [];
             if (params.row.star == 0) {
               btnList.push(addStarBtn);
@@ -238,14 +270,15 @@ export default {
 
             btnList.push(deleteBtn);
             btnList.push(topicBtn);
+            btnList.push(auditBtn);
             return h("div", btnList);
           }
         }
       ],
       formInline: {
-        postId:"",
-        title:"", 
-        userId:""
+        postId: "",
+        title: "",
+        userId: ""
       },
       totals: 0
     };
@@ -259,40 +292,66 @@ export default {
     }
   },
   methods: {
-    topicTransferChange(newTargetKeys){
-      this.updateTopic.update = newTargetKeys;
+    showAuditModal({ postId }) {
+      this.auditModal = true;
+      this.auditPostId = postId;
     },
-    showTopicModal({postId,topicList}){
-      var that = this;
-       api
-            .request({
-              act: "admin.post.unauditList"
-            })
-            .then(response => {
-                    var topicIdList = topicList.map(function(v){return v.id});
-                    var allTopicList = response.data.map(function(v){return {key:v.id,label:v.name}})
-                    that.updateTopic.info = allTopicList;
-                    that.updateTopic.update=topicIdList;
-                    that.updateTopic.postId=postId;
-                    that.topicModal=true;
-            });
-      // 加载这个post的topic状态和所有的topic信息，用来组成transfer
-
-    },
-    hideTopicModal(){
-      this.topicModal = false;
-    },
-    doUpdateTopic(){
+    doUpdateAuditStatus() {
+      console.log(this.auditStatus);
       var that = this;
       api
-            .request({
-              act: "admin.post.updateTopicList",
-              topicIdListStr:JSON.stringify(this.updateTopic.update),
-              postId:this.updateTopic.postId
-            })
-            .then(response => {
-               that.dispatch({pageNum:that.getPageNum()});
-            });
+        .request({
+          act: "admin.post.audit",
+          auditStatus: this.auditStatus,
+          postId: this.auditPostId
+        })
+        .then(response => {
+          that.dispatch();
+          that.hideAuditModal();
+        });
+    },
+    hideAuditModal() {
+      this.auditModal = false;
+      this.auditPostId = 0;
+      this.auditStatus = 0;
+    },
+    topicTransferChange(newTargetKeys) {
+      this.updateTopic.update = newTargetKeys;
+    },
+    showTopicModal({ postId, topicList }) {
+      var that = this;
+      api
+        .request({
+          act: "admin.post.unauditList"
+        })
+        .then(response => {
+          var topicIdList = topicList.map(function(v) {
+            return v.id;
+          });
+          var allTopicList = response.data.map(function(v) {
+            return { key: v.id, label: v.name };
+          });
+          that.updateTopic.info = allTopicList;
+          that.updateTopic.update = topicIdList;
+          that.updateTopic.postId = postId;
+          that.topicModal = true;
+        });
+      // 加载这个post的topic状态和所有的topic信息，用来组成transfer
+    },
+    hideTopicModal() {
+      this.topicModal = false;
+    },
+    doUpdateTopic() {
+      var that = this;
+      api
+        .request({
+          act: "admin.post.updateTopicList",
+          topicIdListStr: JSON.stringify(this.updateTopic.update),
+          postId: this.updateTopic.postId
+        })
+        .then(response => {
+          that.dispatch({ pageNum: that.getPageNum() });
+        });
     },
     online(postId) {
       var that = this;
@@ -306,7 +365,7 @@ export default {
               postId: postId
             })
             .then(response => {
-              that.dispatch({pageNum:that.getPageNum()});
+              that.dispatch({ pageNum: that.getPageNum() });
             });
         },
         onCancel: () => {}
@@ -324,7 +383,7 @@ export default {
               postId: postId
             })
             .then(response => {
-              that.dispatch({pageNum:that.getPageNum()});
+              that.dispatch({ pageNum: that.getPageNum() });
             });
         },
         onCancel: () => {}
@@ -343,7 +402,7 @@ export default {
               barId: process.env.BAR_ID
             })
             .then(response => {
-              this.dispatch({pageNum:this.getPageNum()});
+              this.dispatch({ pageNum: this.getPageNum() });
             });
         },
         onCancel: () => {}
@@ -361,7 +420,7 @@ export default {
               postId: postId
             })
             .then(response => {
-              this.dispatch({pageNum:this.getPageNum()});
+              this.dispatch({ pageNum: this.getPageNum() });
             });
         },
         onCancel: () => {}
@@ -371,7 +430,8 @@ export default {
       var that = this;
       that.$Modal.confirm({
         title: "请再次确认",
-        content: "请确认是否要进行<font size=3 color=red>帖子取消加精</font>操作",
+        content:
+          "请确认是否要进行<font size=3 color=red>帖子取消加精</font>操作",
         onOk: () => {
           api
             .request({
@@ -379,7 +439,7 @@ export default {
               postId: postId
             })
             .then(response => {
-              this.dispatch({pageNum:this.getPageNum()});
+              this.dispatch({ pageNum: this.getPageNum() });
             });
         },
         onCancel: () => {}
@@ -389,27 +449,28 @@ export default {
       this.pageNum = pageNum ? pageNum : 1;
       this.dispatch({ pageNum: this.pageNum - 1 });
     },
-    getPageNum(){
-      return this.pageNum==0?0:this.pageNum-1;
+    getPageNum() {
+      return this.pageNum == 0 ? 0 : this.pageNum - 1;
     },
     // changePageNum(num) {
     //   this.pageNum = parseInt(num);
     //   this.dispatch({ pageNum: this.pageNum - 1 });
     // },
     searchData() {
-      console.log("fdsa")
-       api.request({
-              barId:process.env.BAR_ID,
-              act: "admin.post.query",
-              postId: this.formInline.postId,
-              title:this.formInline.title,
-              userId:this.formInline.userId,
-              pageNum:0,
-              size:20
-            })
-            .then(response => {
-              this.tableData = response.list;
-            });
+      console.log("fdsa");
+      api
+        .request({
+          barId: process.env.BAR_ID,
+          act: "admin.post.query",
+          postId: this.formInline.postId,
+          title: this.formInline.title,
+          userId: this.formInline.userId,
+          pageNum: 0,
+          size: 20
+        })
+        .then(response => {
+          this.tableData = response.list;
+        });
     },
     info(id) {
       this.modal = true;
