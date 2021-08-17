@@ -9,112 +9,6 @@ const layout = _import('main');
 //主面板
 const main = _import('index/index');
 
-/** 用户模块 start **/
-//用户中心
-const userMain = _import('user/user');
-//添加用户
-const addUser = _import('user/add');
-//修改用户
-const editUser = _import('user/edit');
-
-//修改密码
-const changPwd = _import('user/pwd');
-/** 用户模块 end */
-
-/** 权限模块 start */
-
-//权限列表
-const authMain = _import('auth/rule');
-//添加权限
-const addAuth = _import('auth/add');
-//修改权限
-const editAuth = _import('auth/edit');
-/** 权限模块end */
-
-/**  商品模块 start  **/
-
-//品牌列表
-const brand = _import('brand/index');
-//添加品牌
-const brandAdd = _import('brand/add');
-//编辑品牌
-const brandEdit = _import('brand/edit');
-//商品分类
-const cate = _import('cate/index');
-
-//商品模板
-const goodsTempMain = _import('attr/index');
-//添加商品模板
-const addGoodsTemp = _import('attr/add');
-//修改商品模板 
-const editGoodsTemp = _import('attr/edit');
-
-//商品列表
-const goodsMain = _import('goods/index');
-//添加商品
-const addGoods = _import('goods/add');
-//编辑商品
-const editGoods = _import('goods/edit');
-/** 商品模块 end  **/
-
-
-/** 门店管理 start **/
-const seller = _import('seller/index');
-//添加门店
-const sellerAdd = _import('seller/add');
-//修改门店
-const sellerEdit = _import('seller/edit');
-//门店详情
-const sellerInfo = _import('seller/info');
-//店员管理
-const sellerAsslist = _import('asslist/index');
-
-/** 门店管理end **/
-
-/** 消费者管理 start **/
-//消费者列表
-const consumer = _import('consumer/index');
-//消费者详情
-const consumerInfo = _import('consumer/info');
-/** 消费者管理end **/
-
-/** 订单模块 start **/
-
-//订单列表
-const order = _import('orders/index');
-//订单详情
-const orderInfo = _import('orders/info');
-
-//呼叫中心
-const call = _import('orders/call');
-//代客下单
-const buy = _import('orders/buy');
-
-/** 订单模块 end **/
-
-//** 财务中心 start */
-const finance = _import('finance/index');
-//结算审批列表
-const cash = _import('finance/cash');
-//退款审批列表
-const refund = _import('finance/refund');
-//退款单详情
-const refundInfo = _import('finance/refundInfo');
-
-//** 财务中心 end */
-
-/** 仓库模块 start **/
-//仓库列表
-const godown = _import('godown/index');
-
-//添加仓库
-const godown_create = _import('godown/add');
-//编辑仓库
-const godown_update = _import('godown/edit');
-//仓库人员
-const godown_user = _import('godown/user');
-//添加仓库人员
-const godown_adduser = _import('godown/adduser');
 
 const postList = _import('post/index')
 const postDetail = _import("post/detail")
@@ -124,6 +18,7 @@ const offlineList = _import("post/offlineList")
 const starPostList = _import("post/starPostList")
 const topicList = _import("topic/list")
 const unauditList = _import("post/unauditList")
+const bannerIndex = _import("banner/index")
 
 /** 仓库模块 end **/
 
@@ -155,6 +50,13 @@ export default [
     path: '/topic', name: 'topic', icon: 'ios-cog', component: layout, redirect: '/topic/list',
     children: [
       { path: 'list', name: 'topic列表', meta: { alias: 'topicList' }, component: topicList }
+
+    ]
+  },
+  {
+    path: '/banner', name: 'banner', icon: 'ios-cog', component: layout, redirect: '/banner/index',
+    children: [
+      { path: 'index', name: 'banner列表', meta: { alias: 'bannerIndex' }, component: bannerIndex }
 
     ]
   }
